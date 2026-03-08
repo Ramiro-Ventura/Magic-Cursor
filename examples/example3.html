@@ -47,19 +47,11 @@
 
         .follower{
 
-            width: 20px;
-            height: 20px;
             border-radius: 20px;
             background-color: white;
             transition: width .4s, height .4s;
             margin-left: -10px;
             margin-top: -10px;
-        }
-
-        .follower-hover{
-
-            width: 100px;
-            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -87,8 +79,11 @@
     <script>
 
         let cursor = new MagicCursor({
-            delay: 0.15,
+            delay: 0.1,
             className: "follower",
+            width: "20px",
+            height: "20px",
+            position: "50% 50%"
         });
 
         cursor.onHover({
@@ -96,6 +91,8 @@
             selector: '.box',
             className: 'follower-hover',
             cursor: '👆',
+            width: "100px",
+            height: "40px",
             onEnter: (element) => element.classList.add('box-hover'),
             onLeave: (element) => element.classList.remove('box-hover')
         });
