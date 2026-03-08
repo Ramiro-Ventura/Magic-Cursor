@@ -1,26 +1,47 @@
-# MagicCursor
+# ✨ MagicCursor
 
-**MagicCursor** is a lightweight JavaScript utility that enhances the mouse cursor with:
+![license](https://img.shields.io/badge/license-MIT-blue.svg)
+![size](https://img.shields.io/badge/dependency-none-brightgreen)
+![js](https://img.shields.io/badge/javascript-ES6+-yellow)
+![status](https://img.shields.io/badge/status-stable-success)
 
-- 🎯 Custom cursor characters, images, or CSS cursors
-- ✨ Particle trails following the cursor
-- 🌀 Smooth cursor follower with configurable delay
-- 🎨 Multiple particle shapes, colors, and physics options
-- 🖱 Hover effects with custom cursor, particles, and callbacks
+**MagicCursor** is a lightweight JavaScript utility that lets you create **custom cursors, smooth followers, and particle trails** with powerful configuration.
 
-It uses **pure JavaScript and Canvas**, with no external dependencies.
+It uses **pure JavaScript + Canvas** with **zero dependencies**.
+
+Perfect for:
+
+- landing pages
+- portfolios
+- creative websites
+- interactive UI
+- gaming interfaces
 
 ---
 
-# Installation
+# ✨ Features
 
-Download or include the script in your project.
+- 🎯 Custom cursors (emoji, text, image, or CSS cursor)
+- 🌀 Smooth cursor follower
+- ✨ Particle trail system
+- 🎨 Multiple particle shapes
+- 🌈 Rainbow or custom colors
+- 🧲 Physics simulation (gravity, friction, bounce)
+- 🖱 Hover interactions
+- ⚡ Lightweight
+- 🧹 Automatic cleanup
+
+---
+
+# 📦 Installation
+
+Simply include the script in your project.
 
 ```html
 <script src="magic-cursor.js"></script>
 ```
 
-Then initialize it:
+Then initialize:
 
 ```javascript
 const cursor = new MagicCursor();
@@ -28,7 +49,7 @@ const cursor = new MagicCursor();
 
 ---
 
-# Basic Example
+# 🚀 Basic Example
 
 ```javascript
 const cursor = new MagicCursor({
@@ -40,69 +61,142 @@ const cursor = new MagicCursor({
 
 ---
 
-# Cursor Options
+# 🎯 Cursor Options
 
 | Option | Type | Default | Description |
 |------|------|------|------|
-| `cursor` | string | `"default"` | Cursor style, emoji, or image URL |
-| `delay` | number | `0.15` | Smooth follower delay (0–1) |
-| `className` | string | `null` | CSS class for the cursor follower element |
-| `particles` | object | `null` | Particle system configuration |
+| `cursor` | string | `"default"` | Cursor style, emoji, or image |
+| `delay` | number | `0.15` | Follower smoothing |
+| `className` | string | `null` | CSS class applied to follower |
+| `particles` | object | `null` | Default particle configuration |
 
 ---
 
-# Particle System
+# 🖱 Cursor Types
 
-Enable particles when creating the cursor:
+### Standard CSS Cursor
+
+```javascript
+cursor: "pointer"
+```
+
+### Emoji / Character Cursor
+
+```javascript
+cursor: "🔥"
+```
+
+### Image Cursor
+
+```javascript
+cursor: "https://example.com/cursor.png"
+```
+
+---
+
+# 🌀 Cursor Follower
+
+If `className` is provided, a follower element will be created.
+
+Example CSS:
+
+```css
+.cursor-follower {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+```
+
+---
+
+# ✨ Particle System
+
+Particles can be enabled globally:
 
 ```javascript
 const cursor = new MagicCursor({
   particles: {
     baseSize: 5,
-    spawnDistance: 15,
+    spawnDistance: 12,
     colors: "rainbow"
   }
 });
 ```
 
+Or dynamically:
+
+```javascript
+cursor.addParticles(options);
+```
+
 ---
 
-# Particle Options
+# ⚙️ Particle Options
 
 | Option | Default | Description |
 |------|------|------|
-| `selector` | `"body"` | Container element where particles render |
+| `selector` | `"body"` | Container where particles render |
 | `shape` | `"circle"` | `circle`, `square`, `triangle`, or image |
 | `rotation` | `[0,360]` | Initial rotation range |
 | `spin` | `[-0.1,0.1]` | Rotation speed |
 | `gravity` | `0` | Downward force |
 | `friction` | `1` | Velocity damping |
-| `baseSize` | `4` | Initial particle size |
-| `finalSize` | `0` | Final size over lifetime |
-| `decay` | `0.015` | Opacity fade speed |
-| `speedMultiplier` | `0` | Particle velocity |
-| `colors` | `"rainbow"` | Color or array of colors |
-| `spawnDistance` | `20` | Distance mouse moves before spawning |
-| `spawnChance` | `1` | Probability of spawning |
+| `baseSize` | `4` | Initial size |
+| `finalSize` | `0` | Final size |
+| `decay` | `0.015` | Fade speed |
+| `speedMultiplier` | `0` | Velocity multiplier |
+| `colors` | `"rainbow"` | Color, array, or rainbow |
+| `spawnDistance` | `20` | Distance before spawn |
+| `spawnChance` | `1` | Spawn probability |
 | `spawnAmount` | `1` | Particles per spawn |
-| `bounce` | `0.7` | Bounce strength |
-| `useCollision` | `false` | Enable container collision |
+| `bounce` | `0.7` | Bounce force |
+| `useCollision` | `false` | Enable collisions |
 | `lifetime` | `0` | Frames before fading |
 
 ---
 
-# Hover Effects
+# 🎲 Random Ranges
 
-You can apply different cursor styles and particles on hover.
+Many options accept **random ranges**.
+
+Example:
+
+```javascript
+baseSize: [2,6]
+```
+
+Each particle receives a random value between **2 and 6**.
+
+You can also use **random choice objects**:
+
+```javascript
+shape: {
+  a: "circle",
+  b: "triangle",
+  c: "square"
+}
+```
+
+---
+
+# 🖱 Hover Interactions
+
+Change cursor, follower class, and particles when hovering elements.
 
 ```javascript
 cursor.onHover({
   selector: ".button",
   cursor: "🔥",
   className: "hover-cursor",
+
   particles: {
-    colors: ["#ff0000", "#ff9900", "#ffff00"],
-    baseSize: 6,
+    colors: ["#ff0000","#ff9900","#ffff00"],
+    baseSize: [4,8],
     speedMultiplier: 2
   }
 });
@@ -110,11 +204,31 @@ cursor.onHover({
 
 ---
 
-# Methods
+# 🔁 Hover Callbacks
+
+You can run custom code when entering or leaving elements.
+
+```javascript
+cursor.onHover({
+  selector: ".card",
+
+  onEnter: (element) => {
+    console.log("Entered:", element);
+  },
+
+  onLeave: (element) => {
+    console.log("Left:", element);
+  }
+});
+```
+
+---
+
+# 🧩 Methods
 
 ## addParticles(options)
 
-Adds a particle system to the cursor.
+Adds a particle system.
 
 ```javascript
 cursor.addParticles({
@@ -127,90 +241,86 @@ cursor.addParticles({
 
 ## onHover(options)
 
-Applies custom effects when hovering elements.
+Adds hover interactions.
+
+| Option | Description |
+|------|------|
+| `selector` | Target elements |
+| `cursor` | Cursor on hover |
+| `className` | Follower class |
+| `particles` | Particle configuration |
+| `onEnter` | Callback on enter |
+| `onLeave` | Callback on leave |
+
+---
+
+# 🧹 Particle Lifecycle
+
+Internal particle controls.
+
+### pause()
+
+Stops spawning particles.
+
+### play()
+
+Resumes spawning.
+
+### destroy()
+
+Stops spawning and removes the system once particles fade.
+
+---
+
+# 🎨 Preset Examples
+
+## ✨ Sparkle Trail
 
 ```javascript
-cursor.onHover({
-  selector: ".card",
-  cursor: "⭐"
+cursor.addParticles({
+  colors: ["#ffffff","#ffe066","#ffd43b"],
+  baseSize: [2,5],
+  speedMultiplier: 1
 });
 ```
 
 ---
 
-# Cursor Types
-
-You can use:
-
-### Standard CSS cursors
+## 🔥 Fire Trail
 
 ```javascript
-cursor: "pointer"
-```
-
-### Emoji or characters
-
-```javascript
-cursor: "🔥"
-```
-
-### Image URL
-
-```javascript
-cursor: "https://example.com/cursor.png"
-```
-
----
-
-# CSS Example (Follower)
-
-```css
-.cursor-follower {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: white;
-  mix-blend-mode: difference;
-  transform: translate(-50%, -50%);
-}
-```
-
----
-
-# Example Setup
-
-```javascript
-const cursor = new MagicCursor({
-  cursor: "✨",
-  className: "cursor-follower",
-  particles: {
-    colors: "rainbow",
-    baseSize: 4,
-    speedMultiplier: 1,
-    spawnDistance: 10
-  }
-});
-
-cursor.onHover({
-  selector: "a, button",
-  cursor: "👉"
+cursor.addParticles({
+  colors: ["#ff0000","#ff6600","#ffaa00"],
+  gravity: -0.05,
+  baseSize: [3,7],
+  speedMultiplier: 1.5
 });
 ```
 
 ---
 
-# Features
+## ❄ Snow Trail
 
-- Lightweight
-- No dependencies
-- Custom cursor rendering
-- Particle physics
-- Hover interactions
-- Canvas based rendering
-- Automatic cleanup
+```javascript
+cursor.addParticles({
+  colors: "#ffffff",
+  gravity: 0.05,
+  baseSize: [3,6],
+  speedMultiplier: 0.5
+});
+```
 
 ---
 
-# License
+# ⚡ Performance Notes
+
+- Uses **Canvas rendering**
+- Animations via **requestAnimationFrame**
+- Distance-based particle spawning
+- Automatic cleanup when destroyed
+
+---
+
+# 📄 License
 
 MIT
