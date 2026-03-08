@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Particle Cursor</title>
+    <style>
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0c;
+            color: white;
+            overflow: hidden;
+            font-family: sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .box{
+
+            width: 500px;
+            height: 300px;
+        }
+
+        .box-1{
+
+            background-color: #0aec61;
+        }
+
+        .box-2{
+
+            background-color: rgb(250, 177, 41);
+        }
+
+        .follower{
+
+            width: 20px;
+            height: 20px;
+            border-radius: 20px;
+            background-color: white;
+            transition: width .4s, height .4s;
+            margin-left: -10px;
+            margin-top: -10px;
+            mix-blend-mode: difference;
+        }
+
+        .follower-hover{
+
+            width: 100px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -20px;  
+        }
+
+        .follower-hover::after{
+
+            content: 'VIEW';
+            color: black;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <div class="box box-1"></div>
+    <div class="box box-2"></div>
+
+    <div id="follower"></div>
+ 
+    <script src="cursor.js"></script>
+
+    <script>
+
+
+        let particleOptions = {
+
+            shape: 'circle',
+            colors: 'rainbow',
+            hueSpeed: 15,             // Extreme color shifting
+            baseSize: 5,
+            finalSize: 150,           // They grow into giant blobs
+            gravity: -0.05,           // They float up like balloons
+            speedMultiplier: 2,
+            spawnDistance: 20,
+            spawnAmount: 1,
+            decay: 0.01,              // Slow fade so the screen gets messy
+            lifetime: 20
+
+        };
+
+        let cursor = new Cursor({
+            delay: 0.15,
+            className: "follower",
+            particles: particleOptions
+        });
+
+        cursor.onHover({
+
+            selector: '.box-1',
+            //className: 'follower-hover',
+            particles:{
+                shape: { shape1: 'square', shape2: 'circle', shape3: 'triangle'},
+                baseSize: [10, 25],
+                finalSize: [2, 5],
+                colors: ['#00ffcc', '#ff00ff', '#000000'], // Cyan, Magenta, Black
+                speedMultiplier: 15, // Big initial explosion
+                friction: 0.85,      // They fly fast but stop almost instantly
+                rotation: [0, 90],   // Keeps them "grid-aligned"
+                spawnDistance: 40,   // Spread out the "glitches"
+                spawnAmount: 5,      // Always a cluster
+                decay: 0.05          // Fast fade
+            }
+        });
+
+
+        const myLogo = new Image();
+        myLogo.src = 'https://img.icons8.com/plasticine/100/morty-smith.png'; // Use a transparent PNG
+
+        const myLogo2 = new Image();
+        myLogo2.src = 'https://img.icons8.com/plasticine/100/beth-smith.png'; // Use a transparent PNG
+
+        const myLogo3 = new Image();
+        myLogo3.src = 'https://img.icons8.com/plasticine/100/summer-smith.png'; // Use a transparent PNG
+
+        const myLogo4 = new Image();
+        myLogo4.src = 'https://img.icons8.com/plasticine/100/rick-sanchez.png'; // Use a transparent PNG
+
+
+        cursor.onHover({
+            selector: '.box-2',
+            particles: {
+                selector: '.box-2',
+                shape: {myLogo, myLogo2, myLogo3, myLogo4},            // Using the image object
+                baseSize: [15, 25],       // Varied leaf sizes
+                finalSize: [10, 15],      // They shrink slightly as they "wither"
+                gravity: 0.05,            // Light downward drift
+                friction: 0.96,           // Air resistance
+                rotation: [0, 360],       // Start at any angle
+                spin: [-0.05, 0.05],      // Slow, organic tumbling
+                speedMultiplier: 2,       // Thrown slightly by the wind of your mouse
+                spawnDistance: 40,        // Only drop a leaf every 40px
+                spawnChance: 0.7,         // Occasional skips for realism
+                decay: 0.005              // Leaves linger for a long time
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+myLogo.onload = () => {
+    /*new ParticleCursor({
+        shape: myLogo, // Pass the image object here
+        spawnDistance: 30, // Only spawn every 60px
+        spawnChance: 0.8,   // 80% chance to spawn when distance is hit
+        baseSize: [20, 50],
+        speedMultiplier: 2
+    });*/
+
+    /*new ParticleCursor({
+        shape: myLogo,           // Using the image object
+        baseSize: [15, 25],       // Varied leaf sizes
+        finalSize: [10, 15],      // They shrink slightly as they "wither"
+        gravity: 0.05,            // Light downward drift
+        friction: 0.96,           // Air resistance
+        rotation: [0, 360],       // Start at any angle
+        spin: [-0.05, 0.05],      // Slow, organic tumbling
+        speedMultiplier: 2,       // Thrown slightly by the wind of your mouse
+        spawnDistance: 40,        // Only drop a leaf every 40px
+        spawnChance: 0.7,         // Occasional skips for realism
+        decay: 0.005              // Leaves linger for a long time
+    });*/
+
+    /*new ParticleCursor({
+        shape: myLogo,
+        baseSize: 20,
+        gravity: 0.6,             // Heavy gold!
+        useCollision: true,
+        bounce: 0.5,              // They hit the "floor" and thud
+        speedMultiplier: [10, 20],// Huge initial explosion
+        friction: 0.98,
+        spawnDistance: 500,       // Only "pop" a burst every 100px
+        spawnAmount: [5, 12],     // A shower of coins!
+        lifetime: 50,             // Stay solid for a while
+        decay: 0.02
+    });*/
+
+    // Assuming ghostImg is a pre-loaded Image() object
+    /*new ParticleCursor({
+        shape: myLogo,
+        baseSize: 20,
+        finalSize: 60,        // They "expand" toward the viewer
+        gravity: -0.02,       // Very slight upward float
+        speedMultiplier: 0,   // They stay where you left them
+        rotation: [0, 20],    // Minimal rotation
+        spawnDistance: 60,    // Spawn rarely
+        spawnChance: 0.5,
+        decay: 0.008,         // They linger on screen
+        lifetime: 0           // Start fading immediately
+    });*/
+
+    // Use images of fragile things: coffeeCup, phone, egg
+    /*new ParticleCursor({
+        shape: myLogo,
+        baseSize: 30,
+        gravity: 1.5,          // Heavier than gravity itself
+        speedMultiplier: 0,    // It doesn't fly, it just drops
+        useCollision: true,
+        bounce: 0.1,           // It hits the floor with a sad "thud"
+        spawnDistance: 80,
+        spawnAmount: 1,
+        decay: 0.01,
+        rotation: [0, 360]     // Starts at a random "falling" angle
+    });*/
+
+};
+
+/*new ParticleCursor({
+    spawnDistance: 5, 
+    spawnAmount: [1, 10], // Sometimes 1 particle, sometimes a burst of 10
+    speedMultiplier: [1, 5]
+});*/
+
+/*const cursor = new ParticleCursor({
+    selector: 'body',           // The element to attach to
+    shape: 'circle',            // 'circle', 'square', 'triangle', or an <img> object
+    colors: 'rainbow',          // 'rainbow', an array ['#ff0000', '#00ff00'], or one string
+    
+    rotation: [0, 360],         // Starting angle (degrees)
+    spin: [-0.1, 0.1],          // Rotation speed per frame
+    gravity: 0.25,               // Constant downward pull
+    friction: 0.98,             // Velocity retention (0 to 1)
+    baseSize: [1, 12],          // Starting diameter/width
+    finalSize: 0,               // Size at the end of life
+    lifetime: 20,               // Frames it stays at 100% opacity
+    decay: 0.01,                // Opacity loss per frame after lifetime ends
+    speedMultiplier: [1, 5],    // Initial "explosion" velocity
+    hueSpeed: 2,                // How fast colors cycle (if rainbow)
+    bounce: [0.3, 0.7],                // Energy kept after hitting a wall (0 to 1)
+    useCollision: true,         // Toggle wall bouncing
+    
+    spawnDistance: 200,     // Pixels moved before checking spawn
+    spawnChance: 1,             // 0 to 1 (probability)
+    spawnAmount: 1         // Number of particles per spawn event
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    baseSize: [5, 15],
+    finalSize: 0,
+    gravity: -0.05,       // Particles float UP like magic smoke
+    speedMultiplier: 0.2, // Very little initial movement
+    friction: 0.98,
+    colors: ['#fff', '#ffd700', '#ff69b4'], // White, Gold, Pink
+    lifetime: 30,
+    decay: 0.01,
+    spawnDistance: 15,
+    spawnAmount: [1, 3]   // Occasional bursts
+});*/
+
+/*new ParticleCursor({
+    shape: 'square',
+    baseSize: [10, 25],
+    finalSize: [2, 5],
+    colors: ['#00ffcc', '#ff00ff', '#000000'], // Cyan, Magenta, Black
+    speedMultiplier: 15, // Big initial explosion
+    friction: 0.85,      // They fly fast but stop almost instantly
+    rotation: [0, 90],   // Keeps them "grid-aligned"
+    spawnDistance: 40,   // Spread out the "glitches"
+    spawnAmount: 5,      // Always a cluster
+    decay: 0.05          // Fast fade
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    baseSize: 2,
+    finalSize: [10, 20],  // Bubbles grow as they rise
+    gravity: -0.15,       // Faster upward float
+    colors: 'rgba(255, 255, 255, 0.4)', // Semi-transparent white
+    spawnDistance: 5,
+    spawnChance: 0.3,     // Only spawns 30% of the time for "sporadic" bubbles
+    speedMultiplier: 1,
+    lifetime: 0,
+    decay: 0.02
+});*/
+
+/*new ParticleCursor({
+    shape: 'triangle',
+    baseSize: [8, 12],
+    colors: 'rainbow',
+    hueSpeed: 10,         // Rapid color shifting
+    gravity: 0.4,         // Heavy pull
+    useCollision: false,   // They hit the floor/walls!
+    bounce: 0.8,          // They stay "alive" and jumpy
+    spin: [-0.3, 0.3],    // Fast chaotic tumbling
+    speedMultiplier: 8,   // Thrown out from the mouse
+    spawnDistance: 100,   // Only "pop" a confetti burst every 100px
+    spawnAmount: [5, 10], // Huge clusters
+    decay: 0.005          // They stay on screen for a long time
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    colors: ['#E2FF9E', '#9EFFF3'], // Pale neon yellows and cyans
+    baseSize: [2, 5],
+    finalSize: 0,
+    gravity: 0,
+    speedMultiplier: 0.5,
+    spawnDistance: 10,
+    spawnChance: 0.1,         // Only a 10% chance to spawn (very rare)
+    lifetime: 20,
+    decay: 0.01,
+    friction: 1               // They never stop moving until they fade
+});*/
+
+/*new ParticleCursor({
+    shape: 'square',
+    colors: 'rainbow',
+    hueSpeed: 5,
+    baseSize: 15,
+    finalSize: 2,
+    speedMultiplier: 0,       // Stay exactly where they are born
+    gravity: 0,
+    friction: 1,
+    spawnDistance: 2,         // Ultra-dense (1 particle every 2 pixels)
+    spawnAmount: 1,
+    decay: 0.03,              // Short, snappy tail
+    rotation: 45              // Diamonds!
+});*/
+
+/*new ParticleCursor({
+    shape: 'triangle',
+    colors: ['#fff', '#00e1ff', '#0044ff'], // Electric blue and white
+    baseSize: [5, 8],
+    finalSize: 0,
+    speedMultiplier: [12, 18], // Huge initial "snap"
+    friction: 0.88,            // Air slows them down rapidly
+    spin: [-0.5, 0.5],         // Fast, erratic spinning
+    spawnDistance: 15,
+    spawnChance: 0.8,
+    spawnAmount: [2, 4],
+    decay: 0.08                // They vanish almost instantly
+});*/
+
+/*new ParticleCursor({
+    shape: 'square',      // Try switching this to 'triangle' occasionally
+    colors: ['#FF1493', '#00FF00', '#FFFF00', '#00FFFF'], // Neon Pink, Lime, Yellow, Cyan
+    baseSize: [10, 20],
+    finalSize: 0,
+    gravity: 0,           // Stationary
+    speedMultiplier: 0,
+    rotation: [0, 90],    // Blocks or Diamonds
+    spawnDistance: 30,
+    spawnAmount: 1,
+    decay: 0.02,
+    lifetime: 15,         // Stay solid, then vanish
+    friction: 1
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    colors: ['#00ff00', '#ccff00', '#ffffff'], // "Sneeze" colors
+    baseSize: [5, 12],
+    finalSize: 0,
+    gravity: 0.5,            // Everything falls sadly
+    speedMultiplier: [15, 25],// The "blast" velocity
+    friction: 0.9,           // Rapidly loses energy
+    spawnDistance: 300,      // It only spawns once every 300px (The buildup)
+    spawnAmount: [50, 100],  // The Sneeze (The payoff)
+    decay: 0.05
+});*/
+
+/*new ParticleCursor({
+    shape: 'triangle',
+    colors: '#fff',           // Sharp, black, judging you
+    baseSize: 5,
+    finalSize: 5,             // They don't shrink, they just disappear
+    gravity: 0,
+    speedMultiplier: 20,      // They fly out fast
+    friction: 0.5,            // ...but they hit an "invisible wall" instantly
+    spin: [-2, 2],            // Violent spinning
+    spawnDistance: 2,         // Constant trail
+    spawnAmount: 1,
+    lifetime: 0,
+    decay: 0.2                // They vanish almost as soon as they appear
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    colors: 'rainbow',
+    hueSpeed: 15,             // Extreme color shifting
+    baseSize: 5,
+    finalSize: 150,           // They grow into giant blobs
+    gravity: -0.05,           // They float up like balloons
+    speedMultiplier: 2,
+    spawnDistance: 20,
+    spawnAmount: 1,
+    decay: 0.01,              // Slow fade so the screen gets messy
+    lifetime: 20
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    colors: 'rainbow',
+    hueSpeed: 10,
+    baseSize: [2, 6],
+    finalSize: [0, 2],
+    gravity: 0.02,        // It slowly settles like real glitter
+    speedMultiplier: 4,   // It "sprays" out from the mouse
+    friction: 0.98,
+    spawnDistance: 1,     // EVERY PIXEL MOVED
+    spawnAmount: 2,       // DOUBLE THE MESS
+    decay: 0.002,         // It lingers for a LONG time
+    lifetime: 100         // It stays solid forever
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    colors: ['#FFFCE0', '#FBFF00'], // Corn-colored
+    baseSize: 2,           // Starts as a tiny kernel
+    finalSize: 30,          // POPS into a big piece
+    gravity: 0.2,
+    speedMultiplier: 8,
+    friction: 0.95,
+    spawnDistance: 20,
+    spawnAmount: [1, 5],   // Random bursts
+    lifetime: 15,          // It stays a kernel for 15 frames...
+    decay: 0.1             // ...then pops and vanishes fast!
+});*/
+
+/*new ParticleCursor({
+    shape: 'square',
+    colors: '#efefef',     // Deep India Ink
+    baseSize: 8,
+    finalSize: 2,          // Tapers as the ink "dries"
+    rotation: 45,          // The "nib" angle (keep this fixed, not a range!)
+    spin: 0,               // Don't spin, keep the angle steady
+    speedMultiplier: 0,    // Ink stays where it lands
+    gravity: 0,
+    spawnDistance: 1,      // Ultra-dense for a solid line
+    decay: 0.02,           // Short tail
+    lifetime: 10
+});*/
+
+/*new ParticleCursor({
+    shape: 'circle',
+    colors: ['rgba(255, 69, 0, 0.4)', 'rgba(255, 140, 0, 0.3)'], // Diluted orange/red
+    baseSize: [12, 18],    // Natural brush pressure variance
+    finalSize: 25,         // The "wet" paint spreads out slightly
+    gravity: 0.01,         // Very slight "bleed" downward
+    speedMultiplier: 0.2,  // Tiny bit of jitter
+    spawnDistance: 2,      // Dense stroke
+    decay: 0.005,          // Lingers on the "paper"
+    lifetime: 5,
+    friction: 0.9          // Stops movement quickly
+});*/
+
+/*new ParticleCursor({
+    selector: 'body',
+    shape: 'circle',             // Circle is best for smooth, rounded lines
+    colors: 'rainbow',
+    hueSpeed: 5,                 // Controls how fast the colors transition along the line
+    baseSize: 12,                // The thickness of your pen
+    finalSize: 0,                // Tapers the end of the line to a point
+    lifetime: 40,                // How long the line stays solid before fading
+    decay: 0.02,                 // How fast the "tail" vanishes
+    speedMultiplier: 0,          // IMPORTANT: Keeps particles exactly where the mouse was
+    gravity: 0,                  // Prevents the line from "falling"
+    friction: 1,                 // No air resistance needed since speed is 0
+    spawnDistance: 1,            // Spawns a particle every 1 pixel for a solid look
+    spawnChance: 1,              // Ensures no gaps in the line
+    spawnAmount: 1               // One particle per pixel is plenty
+});*/
+
+
+
+/*gravity	    -0.5    to 0.5	
+friction	    0.80    to 1.0
+baseSize	    1       to 100
+finalSize	    0       to 100
+decay	        0.001   to 0.2
+speedMultiplier	0       to 20
+hueSpeed	    0.5     to 10
+bounce	        0       to 1.0
+spawnDistance	1       to 500
+spawnChance	    0       to 1.0
+spawnAmount	    1       to 50
+lifetime	    0       to 200*/
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

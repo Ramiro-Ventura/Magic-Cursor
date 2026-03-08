@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Particle Cursor</title>
+    <style>
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0c;
+            color: white;
+            overflow: hidden;
+            font-family: sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+    </style>
+</head>
+<body>
+
+    <script src="../cursor.js"></script>
+
+    <script>
+
+        let particleOptions = {
+            shape: 'square',
+            colors: 'rainbow',
+            hueSpeed: 5,
+            baseSize: 15,
+            finalSize: 2,
+            speedMultiplier: 0,
+            gravity: 0,
+            friction: 1,
+            spawnDistance: 2,
+            spawnAmount: 1,
+            decay: 0.03,
+            rotation: 45
+        };
+
+        let cursor = new Cursor({
+            particles: particleOptions
+        });
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
