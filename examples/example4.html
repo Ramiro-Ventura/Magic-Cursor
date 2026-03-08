@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Particle Cursor</title>
+    <style>
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background: #0a0a0c;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            overflow: hidden;
+        }
+
+        section{
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100dvh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box{
+
+            width: 500px;
+            height: 300px;
+        }
+
+        .box-1{
+
+            background-color: #0aec61;
+        }
+
+        .box-2{
+
+            background-color: rgb(250, 177, 41);
+        }
+
+        .follower{
+
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: white;
+            transition: width .4s, height .4s;
+            margin-left: 0px;
+            margin-top: -100px;
+            mix-blend-mode: difference;
+        }
+
+        .follower-hover{
+
+            width: 100px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -20px;  
+        }
+
+        .follower-hover::after{
+
+            content: 'VIEW';
+            color: black;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <section></section>
+    <section style="background-color: #0aec61;"></section>
+
+    <script src="../cursor.js"></script>
+
+    <script>
+
+        let cursor = new MagicCursor({
+            delay: 1,
+            className: "follower"
+        });
+
+        /*cursor.onHover({
+
+            selector: '.box-1',
+            className: 'follower-hover',
+            particles:{
+                shape: { shape1: 'square', shape2: 'circle', shape3: 'triangle'},
+                baseSize: [10, 25],
+                finalSize: [2, 5],
+                colors: ['#00ffcc', '#ff00ff', '#000000'],
+                speedMultiplier: 15,
+                friction: 0.85,  
+                rotation: [0, 90], 
+                spawnDistance: 40, 
+                spawnAmount: 5,    
+                decay: 0.05    
+            }
+        });*/
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
