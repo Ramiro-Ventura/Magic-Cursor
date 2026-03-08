@@ -1,6 +1,6 @@
-const Cursor = (() => {
+const MagicCursor = (() => {
 
-    class ParticleCursor {
+    class MagicCursorParticles {
 
         #particles;
         #hue;
@@ -312,7 +312,7 @@ const Cursor = (() => {
         
     }
 
-    return class Cursor {
+    return class MagicCursor {
 
         #cursor;
         #delay;
@@ -409,7 +409,7 @@ const Cursor = (() => {
                     if(options.particles && options.particles != ""){
 
                         this.#particles?.destroy();
-                        this.#particles = new ParticleCursor(options.particles);
+                        this.#particles = new MagicCursorParticles(options.particles);
                     }
 
                     if(options.onEnter) options.onEnter(element);
@@ -425,7 +425,7 @@ const Cursor = (() => {
                     if(this.#defaultParticlesOptions && this.#defaultParticlesOptions != ""){
 
                         this.#particles?.destroy();
-                        this.#particles = new ParticleCursor(this.#defaultParticlesOptions);
+                        this.#particles = new MagicCursorParticles(this.#defaultParticlesOptions);
 
                     }
 
@@ -442,7 +442,7 @@ const Cursor = (() => {
             if(options && options != "") {
                 
                 this.#defaultParticlesOptions = options;
-                this.#particles = new ParticleCursor(options);
+                this.#particles = new MagicCursorParticles(options);
 
             }
         }
