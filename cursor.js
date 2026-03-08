@@ -321,21 +321,27 @@ const MagicCursor = (() => {
         #mouseY;
         #followerX;
         #followerY;
+        #width;
+        #height;
         #follower;
         #particles;
         #defaultParticlesOptions;
+
 
         constructor(options = {}) {
 
 
             this.#cursor     = options.cursor || 'default';
-            this.#delay      = options.delay || 0.15;
+            this.#delay      = options.delay || 0.10;
             this.#className  = options.className;
 
             this.#mouseX     = 0;
             this.#mouseY     = 0;
             this.#followerX  = 0;
             this.#followerY  = 0;
+
+            this.#width     = options.width || "20px";
+            this.#height    = options.height || "20px";
 
             this.#setCursor(this.#cursor);
 
@@ -348,16 +354,24 @@ const MagicCursor = (() => {
                 if(!this.#follower)
                     this.#follower = document.createElement('div');
 
+                document.body.appendChild(this.#follower);
+
+                this.#follower.classList.add(this.#className);
+
+                const [first, second] = options.position.split(' ').map(val => parseInt(val));
+
                 this.#follower.style.position       = "absolute";
                 this.#follower.style.pointerEvents  = "none";
                 this.#follower.style.willChange     = "transform";
                 this.#follower.style.top            = "0";
                 this.#follower.style.left           = "0";
                 this.#follower.style.display        = "none";
+                this.#follower.style.width          = options.width || "20px";
+                this.#follower.style.height         = options.height || "20px";
+                this.#follower.style.marginLeft     = first ? `-${(first / 100) * parseInt(this.#follower.style.width)}px` : "0";
+                this.#follower.style.marginTop      = second ? `-${(second / 100) * parseInt(this.#follower.style.height)}px` : "0";
 
-                this.#follower.classList.add(this.#className);
-
-                document.body.appendChild(this.#follower);
+                console.log((first / 100) * parseInt(this.#follower.style.width), parseInt(this.#follower.style.height));
 
                 window.addEventListener('mousemove', (e) => {
 
@@ -413,6 +427,9 @@ const MagicCursor = (() => {
                     }
 
                     if(options.onEnter) options.onEnter(element);
+
+                    if(options.width) this.#follower.style.width = options.width;
+                    if(options.height) this.#follower.style.height = options.height;
                 });
 
                 element.addEventListener('mouseleave', () => {
@@ -430,6 +447,9 @@ const MagicCursor = (() => {
                     }
 
                     if(options.onLeave) options.onLeave(element);
+
+                    if(this.#width) this.#follower.style.width = this.#width;
+                    if(this.#height) this.#follower.style.height = this.#height;
 
                 });
             });
