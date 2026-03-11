@@ -49,9 +49,7 @@
 
             border-radius: 20px;
             background-color: white;
-            transition: width .4s, height .4s;
-            margin-left: -10px;
-            margin-top: -10px;
+            transition: width .4s, height .4s, margin-left .4s, margin-top .4s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -93,6 +91,7 @@
             cursor: '👆',
             width: "100px",
             height: "40px",
+            position: "20% 50%",
             onEnter: (element) => element.classList.add('box-hover'),
             onLeave: (element) => element.classList.remove('box-hover')
         });
