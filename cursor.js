@@ -22,24 +22,24 @@ const MagicCursor = (() => {
         constructor(options = {}) {
 
             this.options = {
-
-                selector:           options.selector || 'body',
-                shape:              options.shape || 'circle', 
-                rotation:           options.rotation !== undefined ? options.rotation : [0, 360],
-                spin:               options.spin !== undefined ? options.spin : [-0.1, 0.1],
-                gravity:            options.gravity !== undefined ? options.gravity : 0,
-                friction:           options.friction !== undefined ? options.friction : 1,
-                baseSize:           options.baseSize || 4,
-                finalSize:          options.finalSize !== undefined ? options.finalSize : 0,
-                decay:              options.decay || 0.015,
+ 
+                selector:           options.selector        || 'body',
+                shape:              options.shape           || 'circle', 
+                rotation:           options.rotation        || [0, 360],
+                spin:               options.spin            || [-0.1, 0.1],
+                gravity:            options.gravity         || 0,
+                friction:           options.friction        || 1,
+                baseSize:           options.baseSize        || 4,
+                finalSize:          options.finalSize       || 0,
+                decay:              options.decay           || 0.015,
                 speedMultiplier:    options.speedMultiplier || 0,
-                colors:             options.colors || 'rainbow',
-                spawnDistance:      options.spawnDistance || 20,
-                spawnChance:        options.spawnChance !== undefined ? options.spawnChance : 1,
-                bounce:             options.bounce !== undefined ? options.bounce : 0.7, 
-                useCollision:       options.useCollision !== undefined ? options.useCollision : false,
-                lifetime:           options.lifetime !== undefined ? options.lifetime : 0,
-                spawnAmount:        options.spawnAmount !== undefined ? options.spawnAmount : 1,
+                colors:             options.colors          || 'rainbow',
+                spawnDistance:      options.spawnDistance   || 20,
+                spawnChance:        options.spawnChance     || 1,
+                bounce:             options.bounce          || 0.7, 
+                useCollision:       options.useCollision    || false,
+                lifetime:           options.lifetime        || 0,
+                spawnAmount:        options.spawnAmount     || 1,
             };
 
             this.#particles         = [];
@@ -252,13 +252,23 @@ const MagicCursor = (() => {
                     this.#ctx.closePath();
                     this.#ctx.fill();
 
-                }  else if (shape === 'circle'){
+                } else if (shape === 'circle'){
 
                     this.#ctx.beginPath();
                     this.#ctx.arc(0, 0, p.currentSize, 0, Math.PI * 2);
                     this.#ctx.fill();
 
-                } else this.#ctx.fillRect(-p.currentSize, -p.currentSize, p.currentSize * 2, p.currentSize * 2);
+                } else if (typeof shape === 'string' && shape.length == 1) {
+
+                    this.#ctx.font = `${p.currentSize * 2}px Arial`; 
+                    
+                    this.#ctx.textAlign = 'center';
+                    this.#ctx.textBaseline = 'middle';
+                    
+                    this.#ctx.fillText(shape, 0, 0);
+
+                }
+                else this.#ctx.fillRect(-p.currentSize, -p.currentSize, p.currentSize * 2, p.currentSize * 2);
 
                 this.#ctx.restore();
             }
@@ -323,6 +333,7 @@ const MagicCursor = (() => {
         #followerY;
         #width;
         #height;
+        #position;
         #follower;
         #particles;
         #defaultParticlesOptions;
@@ -331,17 +342,18 @@ const MagicCursor = (() => {
         constructor(options = {}) {
 
 
-            this.#cursor     = options.cursor || 'default';
-            this.#delay      = options.delay || 0.10;
-            this.#className  = options.className;
+            this.#cursor        = options.cursor || 'default';
+            this.#delay         = options.delay || 0.10;
+            this.#className     = options.className;
 
-            this.#mouseX     = 0;
-            this.#mouseY     = 0;
-            this.#followerX  = 0;
-            this.#followerY  = 0;
+            this.#mouseX        = 0;
+            this.#mouseY        = 0;
+            this.#followerX     = 0;
+            this.#followerY     = 0;
 
-            this.#width     = options.width || "20px";
-            this.#height    = options.height || "20px";
+            this.#width         = options.width || "20px";
+            this.#height        = options.height || "20px";
+            this.#position      = options.position || "50% 50%";
 
             this.#setCursor(this.#cursor);
 
@@ -358,7 +370,6 @@ const MagicCursor = (() => {
 
                 this.#follower.classList.add(this.#className);
 
-                const [first, second] = options.position.split(' ').map(val => parseInt(val));
 
                 this.#follower.style.position       = "absolute";
                 this.#follower.style.pointerEvents  = "none";
@@ -368,25 +379,10 @@ const MagicCursor = (() => {
                 this.#follower.style.display        = "none";
                 this.#follower.style.width          = options.width || "20px";
                 this.#follower.style.height         = options.height || "20px";
-                this.#follower.style.marginLeft     = first ? `-${(first / 100) * parseInt(this.#follower.style.width)}px` : "0";
-                this.#follower.style.marginTop      = second ? `-${(second / 100) * parseInt(this.#follower.style.height)}px` : "0";
 
-                console.log((first / 100) * parseInt(this.#follower.style.width), parseInt(this.#follower.style.height));
+                this.#setPosition(this.#position);
 
-                window.addEventListener('mousemove', (e) => {
-
-                    if(this.#follower.style.display == "none")
-                        this.#follower.style.removeProperty('display');
-
-                    this.#mouseX = e.clientX;
-                    this.#mouseY = e.clientY;
-
-                    if (this.#followerX === 0 && this.#followerY === 0){
-                        this.#followerX = e.clientX;
-                        this.#followerY = e.clientY;
-                    }
-
-                });        
+                window.addEventListener('mousemove', (e) => this.#onMouseMove(e));        
 
                 this.#animate();
             }
@@ -405,6 +401,50 @@ const MagicCursor = (() => {
             requestAnimationFrame(this.#animate);
         }
 
+        #setPosition = (position) => {
+
+            if(!this.#follower) return;
+
+            const [first, second] = position.split(' ').map(val => parseInt(val));
+
+            this.#follower.style.marginLeft = first ? `-${(first / 100) * parseInt(this.#follower.style.width)}px` : "0";
+            this.#follower.style.marginTop  = second ? `-${(second / 100) * parseInt(this.#follower.style.height)}px` : "0";
+        }
+
+        #setCursor = (cursor) => {
+
+             if(cursor && cursor != ""){
+
+                let svg = `data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 100 100' style='fill:black;font-size:48px;'%3E%3Ctext y='50%25'%3E${cursor}%3C/text%3E%3C/svg%3E`
+
+                if(cursor.indexOf('http') == 0) document.body.style.cursor = `url('${cursor}') 24 24, auto`;
+                else if (this.#isChar(cursor)) document.body.style.cursor = `url("${svg}") 20 0, auto`;
+                else document.body.style.cursor = cursor;
+            } 
+        }
+
+        #isChar = (val) => {
+
+            if (typeof val !== 'string') return false;
+            const segments = [...new Intl.Segmenter().segment(val)];
+            return segments.length === 1;
+        };
+
+        #onMouseMove = (e) => {
+
+            if(this.#follower.style.display == "none")
+                this.#follower.style.removeProperty('display');
+
+            this.#mouseX = e.clientX;
+            this.#mouseY = e.clientY;
+
+            if (this.#followerX === 0 && this.#followerY === 0){
+                this.#followerX = e.clientX;
+                this.#followerY = e.clientY;
+            }
+
+        }
+    
         onHover(options = {}){
 
             let elements = [];
@@ -428,8 +468,11 @@ const MagicCursor = (() => {
 
                     if(options.onEnter) options.onEnter(element);
 
-                    if(options.width) this.#follower.style.width = options.width;
-                    if(options.height) this.#follower.style.height = options.height;
+                    if(options.width && this.#follower) this.#follower.style.width = options.width;
+                    if(options.height && this.#follower) this.#follower.style.height = options.height;
+
+                    let pos = options.position || this.#position;
+                    if(pos) this.#setPosition(pos);
                 });
 
                 element.addEventListener('mouseleave', () => {
@@ -448,9 +491,10 @@ const MagicCursor = (() => {
 
                     if(options.onLeave) options.onLeave(element);
 
-                    if(this.#width) this.#follower.style.width = this.#width;
-                    if(this.#height) this.#follower.style.height = this.#height;
-
+                    if(this.#width && this.#follower) this.#follower.style.width = this.#width;
+                    if(this.#height && this.#follower) this.#follower.style.height = this.#height;
+                    
+                    if(this.#position) this.#setPosition(this.#position);
                 });
             });
 
@@ -466,26 +510,6 @@ const MagicCursor = (() => {
 
             }
         }
-
-        #setCursor(cursor){
-
-             if(cursor && cursor != ""){
-
-                let svg = `data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 100 100' style='fill:black;font-size:48px;'%3E%3Ctext y='50%25'%3E${cursor}%3C/text%3E%3C/svg%3E`
-
-                if(cursor.indexOf('http') == 0) document.body.style.cursor = `url('${cursor}') 24 24, auto`;
-                else if (this.#isChar(cursor)) document.body.style.cursor = `url("${svg}") 20 0, auto`;
-                else document.body.style.cursor = cursor;
-            } 
-        }
-
-        #isChar = (val) => {
-
-            if (typeof val !== 'string') return false;
-            const segments = [...new Intl.Segmenter().segment(val)];
-            return segments.length === 1;
-        };
-    
     };
 
 })();
