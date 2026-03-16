@@ -40,6 +40,11 @@ Simply include the script in your project.
 ```html
 <script src="magic-cursor.js"></script>
 ```
+or use the CDN
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/Ramiro-Ventura/Magic-Cursor@latest/cursor.min.js"></script>
+```
 
 Then initialize:
 
