@@ -24,7 +24,8 @@ const MagicCursor = (() => {
             this.options = {
  
                 selector:           options.selector        || 'body',
-                shape:              options.shape           || 'circle', 
+                shape:              options.shape           || 'circle',
+                font:               options.font            || 'Arial',
                 rotation:           options.rotation        || [0, 360],
                 spin:               options.spin            || [-0.1, 0.1],
                 gravity:            options.gravity         || 0,
@@ -174,6 +175,7 @@ const MagicCursor = (() => {
                 vx: (Math.random() - 0.5) * this.#parseRange(this.options.speedMultiplier),
                 vy: (Math.random() - 0.5) * this.#parseRange(this.options.speedMultiplier),
                 shape: this.#parseRange(this.options.shape),
+                font:  this.#parseRange(this.options.font),
                 startSize: bSize,
                 currentSize: bSize,
                 finalSize: fSize,
@@ -260,7 +262,7 @@ const MagicCursor = (() => {
 
                 } else if (typeof shape === 'string' && shape.length == 1) {
 
-                    this.#ctx.font = `${p.currentSize * 2}px Arial`; 
+                    this.#ctx.font = `${p.currentSize * 2}px ${p.font}`;
                     
                     this.#ctx.textAlign = 'center';
                     this.#ctx.textBaseline = 'middle';

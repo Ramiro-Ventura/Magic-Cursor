@@ -3,33 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixed Particle Cursor</title>
+    <title>Example 5</title>
     <style>
         
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
+            height: 100%;
             background: #0a0a0c;
             color: white;
+            overflow: hidden;
             font-family: sans-serif;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: space-around;
-            overflow: hidden;
-        }
-
-        section{
-
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100dvh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .box{
@@ -48,56 +36,40 @@
             background-color: rgb(250, 177, 41);
         }
 
-        .follower{
-
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-color: white;
-            transition: width .4s, height .4s;
-            margin-left: 0px;
-            margin-top: -100px;
-            mix-blend-mode: difference;
-        }
-
-        .follower-hover{
-
-            width: 100px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: -20px;  
-        }
-
-        .follower-hover::after{
-
-            content: 'VIEW';
-            color: black;
-            font-weight: 700;
-        }
-
     </style>
 </head>
 <body>
 
 
-    <section></section>
-    <section style="background-color: #0aec61;"></section>
-
-    <script src="../cursor.js"></script>
+    <div class="box box-1"></div>
+    <div class="box box-2"></div>
+ 
+    <script src="cursor.js"></script>
 
     <script>
 
-        let cursor = new MagicCursor({
-            delay: 1,
-            className: "follower"
-        });
 
-        /*cursor.onHover({
+        let particleOptions = {
+
+            shape: 'circle',
+            colors: 'rainbow',
+            hueSpeed: 15,
+            baseSize: 5,
+            finalSize: 150,
+            gravity: -0.05,
+            speedMultiplier: 2,
+            spawnDistance: 20,
+            spawnAmount: 1,
+            decay: 0.01,
+            lifetime: 20
+
+        };
+
+        let cursor = new MagicCursor({ particles: particleOptions });
+
+        cursor.onHover({
 
             selector: '.box-1',
-            className: 'follower-hover',
             particles:{
                 shape: { shape1: 'square', shape2: 'circle', shape3: 'triangle'},
                 baseSize: [10, 25],
@@ -107,10 +79,42 @@
                 friction: 0.85,  
                 rotation: [0, 90], 
                 spawnDistance: 40, 
-                spawnAmount: 5,    
-                decay: 0.05    
+                spawnAmount: 5, 
+                decay: 0.05   
             }
-        });*/
+        });
+
+
+        const myLogo = new Image();
+        myLogo.src = 'https://img.icons8.com/plasticine/100/morty-smith.png';
+
+        const myLogo2 = new Image();
+        myLogo2.src = 'https://img.icons8.com/plasticine/100/beth-smith.png';
+
+        const myLogo3 = new Image();
+        myLogo3.src = 'https://img.icons8.com/plasticine/100/summer-smith.png';
+
+        const myLogo4 = new Image();
+        myLogo4.src = 'https://img.icons8.com/plasticine/100/rick-sanchez.png';
+
+
+        cursor.onHover({
+            selector: '.box-2',
+            particles: {
+                selector: '.box-2',
+                shape: {myLogo, myLogo2, myLogo3, myLogo4},
+                baseSize: [15, 25],
+                finalSize: [10, 15],
+                gravity: 0.05,
+                friction: 0.96,
+                rotation: [0, 360],
+                spin: [-0.05, 0.05],
+                speedMultiplier: 2,
+                spawnDistance: 40,
+                spawnChance: 0.7,
+                decay: 0.005
+            }
+        });
 
     </script>
 </body>

@@ -5,7 +5,7 @@
 ![js](https://img.shields.io/badge/javascript-ES6+-yellow)
 ![status](https://img.shields.io/badge/status-stable-success)
 
-**MagicCursor** is a lightweight JavaScript utility that lets you create **custom cursors, smooth followers, and particle trails** with powerful configuration.
+**MagicCursor** is a lightweight JavaScript library that lets you create **custom cursors, smooth followers, and particle trails** with powerful configuration.
 
 It uses **pure JavaScript + Canvas** with **zero dependencies**.
 
@@ -68,6 +68,9 @@ const cursor = new MagicCursor({
 | `cursor` | string | `"default"` | Cursor style, emoji, or image |
 | `delay` | number | `0.15` | Follower smoothing |
 | `className` | string | `null` | CSS class applied to follower |
+| `width` | string | `"20px"` | Width of the follower |
+| `height` | string | `"20px"` | Height of the follower |
+| `position` | string | `"50% 50%"` | Follower position relative to cursor |
 | `particles` | object | `null` | Default particle configuration |
 
 ---
@@ -83,7 +86,7 @@ cursor: "pointer"
 ### Emoji / Character Cursor
 
 ```javascript
-cursor: "🔥"
+cursor: "🔥" || cursor: "M"
 ```
 
 ### Image Cursor
@@ -102,13 +105,8 @@ Example CSS:
 
 ```css
 .cursor-follower {
-  width: 18px;
-  height: 18px;
   border-radius: 50%;
   background: white;
-  mix-blend-mode: difference;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
 }
 ```
 
@@ -141,7 +139,8 @@ cursor.addParticles(options);
 | Option | Default | Description |
 |------|------|------|
 | `selector` | `"body"` | Container where particles render |
-| `shape` | `"circle"` | `circle`, `square`, `triangle`, or image |
+| `shape` | `"circle"` | `circle`, `square`, `triangle`, char or image |
+| `font` | `Arial` | Specify a font in case the shape is a char |
 | `rotation` | `[0,360]` | Initial rotation range |
 | `spin` | `[-0.1,0.1]` | Rotation speed |
 | `gravity` | `0` | Downward force |
@@ -170,17 +169,18 @@ Example:
 baseSize: [2,6]
 ```
 
-Each particle receives a random value between **2 and 6**.
+Each particle receives a random value between **2 and 6** (min and max are both inclusive).
 
 You can also use **random choice objects**:
 
 ```javascript
-shape: {
-  a: "circle",
-  b: "triangle",
-  c: "square"
+baseSize: {
+  a: 2,
+  b: 4,
+  c: 6
 }
 ```
+This way the engine will select one random value from 2, 4 and 6.
 
 ---
 
@@ -201,6 +201,7 @@ cursor.onHover({
   }
 });
 ```
+When the cursor hovers an element with the class .button all this properties will be applied and removed as soon as the cursor exits the element. 
 
 ---
 
@@ -228,7 +229,8 @@ cursor.onHover({
 
 ## addParticles(options)
 
-Adds a particle system.
+Adds a particle system to the cursor.  
+This way you can enable the particles whenever you want.
 
 ```javascript
 cursor.addParticles({
@@ -251,24 +253,11 @@ Adds hover interactions.
 | `particles` | Particle configuration |
 | `onEnter` | Callback on enter |
 | `onLeave` | Callback on leave |
-
----
-
-# 🧹 Particle Lifecycle
-
-Internal particle controls.
-
-### pause()
-
-Stops spawning particles.
-
-### play()
-
-Resumes spawning.
-
-### destroy()
-
-Stops spawning and removes the system once particles fade.
+| `delay` | number | `0.15` | Follower smoothing |
+| `className` | string | `null` | CSS class applied to follower |
+| `width` | number | `20px` | Width of the follower |
+| `height` | number | `20px` | Height of the follower |
+| `position` | string | `50% 50%` | Follower position relative to cursor |
 
 ---
 
