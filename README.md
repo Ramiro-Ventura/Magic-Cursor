@@ -1,11 +1,11 @@
-# ✨ MagicCursor
+# ✨ Magic Cursor
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![size](https://img.shields.io/badge/dependency-none-brightgreen)
 ![js](https://img.shields.io/badge/javascript-ES6+-yellow)
 ![status](https://img.shields.io/badge/status-stable-success)
 
-**MagicCursor** is a lightweight JavaScript library that lets you create **custom cursors, smooth followers, and particle trails** with powerful configuration.
+**Magic Cursor** is a lightweight JavaScript library that lets you create **custom cursors, smooth followers, and particle trails** with powerful configuration.
 
 It uses **pure JavaScript + Canvas** with **zero dependencies**.
 
@@ -43,7 +43,7 @@ Simply include the script in your project.
 or use the CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/Ramiro-Ventura/Magic-Cursor@latest/cursor.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Ramiro-Ventura/Magic-Cursor@latest/magic-cursor.min.js"></script>
 ```
 
 Then initialize:
