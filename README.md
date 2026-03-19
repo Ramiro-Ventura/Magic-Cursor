@@ -143,7 +143,6 @@ cursor.addParticles(options);
 
 | Option | Default | Description |
 |------|------|------|
-| `selector` | `"body"` | Container where particles render |
 | `shape` | `"circle"` | `circle`, `square`, `triangle`, char or image |
 | `font` | `Arial` | Specify a font in case the shape is a char |
 | `rotation` | `[0,360]` | Initial rotation range |

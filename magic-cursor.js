@@ -1,5 +1,10 @@
 const MagicCursor = (() => {
 
+    const isMobile = () =>
+        window.matchMedia('(pointer: coarse)').matches ||
+        ('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0);
+
     class MagicCursorParticles {
 
         #particles;
@@ -13,7 +18,6 @@ const MagicCursor = (() => {
         #isActive;
         #isSpawning = true;
 
-        #container;
         #ctx;
         #resizeObserver;
         #onMouseMove
@@ -21,9 +25,10 @@ const MagicCursor = (() => {
 
         constructor(options = {}) {
 
+            if (isMobile()) return;
+
             this.options = {
  
-                selector:           options.selector        || 'body',
                 shape:              options.shape           || 'circle',
                 font:               options.font            || 'Arial',
                 rotation:           options.rotation        || [0, 360],
@@ -89,33 +94,29 @@ const MagicCursor = (() => {
 
         #init() {
 
-            this.#container = document.querySelector(this.options.selector);
-            if (!this.#container) return;
 
             this.#canvas = document.createElement('canvas');
             this.#ctx = this.#canvas.getContext('2d');
 
-            if (getComputedStyle(this.#container).position === 'static')
-                this.#container.style.position = 'relative';
 
             Object.assign(this.#canvas.style, {
-                position: 'absolute', 
-                top: '0', 
+
+                position: 'fixed',
+                top: '0',
                 left: '0',
-                pointerEvents: 'none', 
-                zIndex: '9999', 
-                display: 'block'
+                'pointer-events': 'none',
+                'z-index': '99999',
+                'will-change': 'transform'
             });
 
-            this.#container.appendChild(this.#canvas);
+            document.body.appendChild(this.#canvas);
             this.#resizeObserver = new ResizeObserver(() => this.#resize());
-            this.#resizeObserver.observe(this.#container);
+            this.#resizeObserver.observe(document.body);
 
             this.#onMouseMove = (e) => {
 
-                const rect = this.#container.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                const x = e.clientX;
+                const y = e.clientY;
 
                 if (this.#lastX === null) {
                     this.#lastX = x;
@@ -156,7 +157,7 @@ const MagicCursor = (() => {
                 this.#lastY = y;
             };
 
-            this.#container.addEventListener('mousemove', this.#onMouseMove);
+            document.body.addEventListener('mousemove', this.#onMouseMove);
             this.#resize();
             this.#animate();
 
@@ -284,9 +285,10 @@ const MagicCursor = (() => {
         }
 
         #resize() {
-            if (!this.#container || !this.#canvas) return;
-            this.#canvas.width = this.#container.offsetWidth;
-            this.#canvas.height = this.#container.offsetHeight;
+
+            if (!this.#canvas) return;
+            this.#canvas.width = window.innerWidth;
+            this.#canvas.height = window.innerHeight;
         }
 
         #checkParticles = () => {
@@ -295,14 +297,13 @@ const MagicCursor = (() => {
 
                 this.#resizeObserver?.disconnect();
 
-                if (this.#container && this.#onMouseMove) 
-                    this.#container.removeEventListener('mousemove', this.#onMouseMove);
+                if (document.body && this.#onMouseMove) 
+                    document.body.removeEventListener('mousemove', this.#onMouseMove);
     
                 this.#canvas?.remove();
 
                 this.#canvas = null;
                 this.#ctx = null;
-                this.#container = null;
                 this.#resizeObserver = null;
                 this.#onMouseMove = null;
                 this.#particles = null;
@@ -343,6 +344,7 @@ const MagicCursor = (() => {
 
         constructor(options = {}) {
 
+            if (isMobile()) return;
 
             this.#cursor        = options.cursor || 'default';
             this.#delay         = options.delay || 0.10;
@@ -381,6 +383,8 @@ const MagicCursor = (() => {
                 this.#follower.style.display        = "none";
                 this.#follower.style.width          = options.width || "20px";
                 this.#follower.style.height         = options.height || "20px";
+                this.#follower.style.position = "fixed";
+                this.#follower.style.transform = "translate3d(0,0,0)";
 
                 this.#setPosition(this.#position);
 
@@ -449,6 +453,8 @@ const MagicCursor = (() => {
     
         onHover(options = {}){
 
+            if (isMobile()) return;
+
             let elements = [];
 
             if (typeof options.selector === 'string') elements = Array.from(document.querySelectorAll(options.selector));
@@ -504,6 +510,8 @@ const MagicCursor = (() => {
         }
     
         addParticles(options){
+
+            if (isMobile()) return;
 
             if(options && options != "") {
                 
