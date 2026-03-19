@@ -468,8 +468,10 @@ const MagicCursor = (() => {
                     
                     this.#setCursor(options.cursor);
 
-                    if(options.particles && options.particles != ""){
-
+                    if (options.particles === null) {
+                        this.#particles?.destroy();
+                        this.#particles = null;
+                    } else if(options.particles && options.particles != ""){
                         this.#particles?.destroy();
                         this.#particles = new MagicCursorParticles(options.particles);
                     }
@@ -490,12 +492,11 @@ const MagicCursor = (() => {
 
                     this.#setCursor(this.#cursor);
 
-                    if(this.#defaultParticlesOptions && this.#defaultParticlesOptions != ""){
+                    this.#particles?.destroy();
+                    this.#particles = null;
 
-                        this.#particles?.destroy();
+                    if(this.#defaultParticlesOptions && this.#defaultParticlesOptions != "")
                         this.#particles = new MagicCursorParticles(this.#defaultParticlesOptions);
-
-                    }
 
                     if(options.onLeave) options.onLeave(element);
 

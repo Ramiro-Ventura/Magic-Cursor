@@ -227,24 +227,6 @@ cursor.onHover({
 });
 ```
 
----
-
-# 🧩 Methods
-
-## addParticles(options)
-
-Adds a particle system to the cursor.  
-This way you can enable the particles whenever you want.
-
-```javascript
-cursor.addParticles({
-  colors: "rainbow",
-  baseSize: 5
-});
-```
-
----
-
 ## onHover(options)
 
 Adds hover interactions.
@@ -262,6 +244,34 @@ Adds hover interactions.
 | `width` | number | `20px` | Width of the follower |
 | `height` | number | `20px` | Height of the follower |
 | `position` | string | `50% 50%` | Follower position relative to cursor |
+
+---
+
+### Disable particles onHover
+
+If you want to disable the particles when hovering over a specific object just set the particles to null.
+
+```javascript
+cursor.onHover({
+  particles: null
+});
+```
+
+---
+
+# 🧩 Other Methods
+
+## addParticles(options)
+
+Adds a particle system to the cursor.  
+This way you can enable the particles whenever you want.
+
+```javascript
+cursor.addParticles({
+  colors: "rainbow",
+  baseSize: 5
+});
+```
 
 ---
 
