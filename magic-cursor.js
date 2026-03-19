@@ -373,7 +373,7 @@ const MagicCursor = (() => {
                 this.#follower.classList.add(this.#className);
 
 
-                this.#follower.style.position       = "absolute";
+                this.#follower.style.position       = "fixed";
                 this.#follower.style.pointerEvents  = "none";
                 this.#follower.style.willChange     = "transform";
                 this.#follower.style.top            = "0";
