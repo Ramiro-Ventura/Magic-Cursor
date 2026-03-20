@@ -423,10 +423,26 @@ const MagicCursor = (() => {
 
                 let svg = `data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 100 100' style='fill:black;font-size:48px;'%3E%3Ctext y='50%25'%3E${cursor}%3C/text%3E%3C/svg%3E`
 
-                if(cursor.indexOf('http') == 0) document.body.style.cursor = `url('${cursor}') 24 24, auto`;
+                if(isStringURL(cursor)) document.body.style.cursor = `url('${cursor}') 24 24, auto`;
                 else if (this.#isChar(cursor)) document.body.style.cursor = `url("${svg}") 20 0, auto`;
                 else document.body.style.cursor = cursor;
             } 
+
+            function isStringURL(str){
+
+                try {
+                    new URL(str);
+                    return true;
+
+                } catch (_) {
+
+                    const isRelative = /^\/|^\.\/|^\.\.\//.test(str);
+                    
+                    if (isRelative) return true;
+                    
+                    return false;
+                }
+            }
         }
 
         #isChar = (val) => {
