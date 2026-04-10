@@ -341,7 +341,6 @@ const MagicCursor = (() => {
         #particles;
         #defaultParticlesOptions;
 
-
         constructor(options = {}) {
 
             if (isMobile()) return;
@@ -423,7 +422,7 @@ const MagicCursor = (() => {
 
                 let svg = `data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 100 100' style='fill:black;font-size:48px;'%3E%3Ctext y='50%25'%3E${cursor}%3C/text%3E%3C/svg%3E`
 
-                if(isStringURL(cursor)) document.body.style.cursor = `url('${cursor}') 24 24, auto`;
+                if(isStringURL(cursor)) document.body.style.cursor = `url('${cursor}') 0 0, auto`;
                 else if (this.#isChar(cursor)) document.body.style.cursor = `url("${svg}") 20 0, auto`;
                 else document.body.style.cursor = cursor;
             } 
@@ -466,66 +465,107 @@ const MagicCursor = (() => {
             }
 
         }
-    
-        onHover(options = {}){
+
+        onHover(options = {}) {
 
             if (isMobile()) return;
 
             let elements = [];
-
-            if (typeof options.selector === 'string') elements = Array.from(document.querySelectorAll(options.selector));
+            if (typeof options.selector === 'string')
+                elements = Array.from(document.querySelectorAll(options.selector));
 
             elements.forEach(element => {
 
-                element.addEventListener('mouseenter', () => {
+                element.__magicCursorOptions = options;
 
-                    if(options.className && options.className != "")
-                        this.#follower.classList.add(options.className);
-                    
+                element.addEventListener('mouseenter', (event) => {
+
+                    const from = event.relatedTarget;
+                    if (element.contains(from)) return;
+
+                    if (options.className && options.className !== "") this.#follower.classList.add(options.className);
+
                     this.#setCursor(options.cursor);
 
-                    if (options.particles === null) {
-                        this.#particles?.destroy();
-                        this.#particles = null;
-                    } else if(options.particles && options.particles != ""){
+                    if (options.particles != undefined && options.particles !== "") {
                         this.#particles?.destroy();
                         this.#particles = new MagicCursorParticles(options.particles);
+                    } else if (options.particles === null) {
+                        this.#particles?.pause();
+                    } else if (this.#defaultParticlesOptions && this.#defaultParticlesOptions !== "") {
+                        this.#particles?.destroy();
+                        this.#particles = new MagicCursorParticles(this.#defaultParticlesOptions);
                     }
 
-                    if(options.onEnter) options.onEnter(element);
-
-                    if(options.width && this.#follower) this.#follower.style.width = options.width;
-                    if(options.height && this.#follower) this.#follower.style.height = options.height;
+                    if (options.onEnter) options.onEnter(element);
+                    if (options.width && this.#follower) this.#follower.style.width = options.width;
+                    if (options.height && this.#follower) this.#follower.style.height = options.height;
 
                     let pos = options.position || this.#position;
-                    if(pos) this.#setPosition(pos);
+                    if (pos) this.#setPosition(pos);
                 });
 
-                element.addEventListener('mouseleave', () => {
+                element.addEventListener('mouseleave', (event) => {
 
-                    if(options.className && options.className != "")
+                    const to = event.relatedTarget;
+
+                    if (element.contains(to)) return;
+
+                    if (options.className && options.className !== "")
                         this.#follower.classList.remove(options.className);
 
                     this.#setCursor(this.#cursor);
 
-                    this.#particles?.destroy();
-                    this.#particles = null;
+                    if (options.onLeave) options.onLeave(element);
+                    if (this.#width && this.#follower) this.#follower.style.width = this.#width;
+                    if (this.#height && this.#follower) this.#follower.style.height = this.#height;
+                    if (this.#position) this.#setPosition(this.#position);
 
-                    if(this.#defaultParticlesOptions && this.#defaultParticlesOptions != "")
-                        this.#particles = new MagicCursorParticles(this.#defaultParticlesOptions);
+                    const parentWithOptions = to ? this.#findRegisteredParent(to, element) : null;
 
-                    if(options.onLeave) options.onLeave(element);
+                    if (parentWithOptions) {
 
-                    if(this.#width && this.#follower) this.#follower.style.width = this.#width;
-                    if(this.#height && this.#follower) this.#follower.style.height = this.#height;
-                    
-                    if(this.#position) this.#setPosition(this.#position);
+                        const parentOpts = parentWithOptions.__magicCursorOptions;
+
+                        if (parentOpts.particles != undefined && parentOpts.particles !== "") {
+
+                            this.#particles?.destroy();
+                            this.#particles = new MagicCursorParticles(parentOpts.particles);
+
+                        } else if (this.#defaultParticlesOptions && this.#defaultParticlesOptions !== "") {
+
+                            if (this.#particles) this.#particles.play();
+                            else this.#particles = new MagicCursorParticles(this.#defaultParticlesOptions);
+
+                        }
+
+                    } else {
+
+                        this.#particles?.destroy();
+                        this.#particles = null;
+
+                        if (this.#defaultParticlesOptions && this.#defaultParticlesOptions !== "")
+                            this.#particles = new MagicCursorParticles(this.#defaultParticlesOptions);
+                    }
                 });
             });
-
-
         }
-    
+
+        #findRegisteredParent(node, exclude) {
+
+            let current = node;
+
+            while (current && current !== document.body) {
+
+                if (current !== exclude && current.__magicCursorOptions)
+                    return current;
+
+                current = current.parentElement;
+            }
+
+            return null;
+        }
+
         addParticles(options){
 
             if (isMobile()) return;
